@@ -4,7 +4,7 @@ window.OUTLETS={
   "countries": {
     "IN": {
       "name": "India",
-      "businessOutlets": [["The Economic Times","https://economictimes.indiatimes.com","b"],["Business Standard","https://www.business-standard.com","b"],["Mint","https://www.livemint.com","b"],["Financial Express","https://www.financialexpress.com","b"],["CNBC-TV18","https://www.cnbctv18.com","b"],["Moneycontrol","https://www.moneycontrol.com","b"]],
+      "businessOutlets": [["The Economic Times","https://economictimes.indiatimes.com","b"],["Business Standard","https://www.business-standard.com","b"],["Mint","https://www.livemint.com","b"],["Financial Express","https://www.financialexpress.com","b"],["CNBC-TV18","https://www.cnbctv18.com","b"],["Moneycontrol","https://www.moneycontrol.com","b"],["Moneycontrol Hindi","https://hindi.moneycontrol.com","b"]],
       "languages": [
         {
           "code": "hi",
