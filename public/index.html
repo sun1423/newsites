@@ -215,13 +215,25 @@ function syncHash(){
 async function init(){
   try{
     ROOT=window.OUTLETS||{};
-    const s=await fetch("status.json").then(r=>r.json()).catch(()=>({}));
+    const s=await fetch("status.json").then(r=>r.ok?r.json():{}).catch(()=>({}));
     FAILS=s.fails||{};
     if(s.updated)$("foot").textContent="Links last checked "+new Date(s.updated).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
     const hash=parseHash();
-    const start=await detectCountry();
-    const preferredLang=hash.country===start?hash.lang:"";
-    selectCountry(start,preferredLang,false);syncHash();
+    const initialCode=ROOT.countries?.[hash.country]?hash.country:(ROOT.defaultCountry||"IN");
+    const preferredLang=hash.country===initialCode?hash.lang:"";
+    selectCountry(initialCode,preferredLang,false);
+    syncHash();
+
+    // Show usable outlets immediately; IP-based country detection is only a background enhancement.
+    if(!hash.country){
+      const initialSelection=initialCode;
+      detectCountry().then(code=>{
+        if(code&&ROOT.countries?.[code]&&$("country").value===initialSelection){
+          selectCountry(code,"",false);
+          syncHash();
+        }
+      }).catch(e=>console.warn("Country detection unavailable:",e));
+    }
   }catch(e){
     console.error("Local News initialization failed:",e);
     if(!Object.keys(ROOT.countries||{}).length){
@@ -230,7 +242,7 @@ async function init(){
     }else{
       const fallback=ROOT.defaultCountry||"IN";
       selectCountry(fallback);
-      $("empty").hidden=true;
+      syncHash();
     }
   }
 }
