@@ -63,7 +63,7 @@ window.OUTLETS={
             ],
             [
               "Dainik Tribune",
-              "https://www.dainiktribune.com",
+              "https://www.dainiktribuneonline.com/",
               "p"
             ],
             [
