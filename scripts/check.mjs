@@ -9,7 +9,8 @@ try { prev = JSON.parse(fs.readFileSync("public/status.json", "utf8")); } catch 
 const languages = data.countries
   ? Object.values(data.countries).flatMap(c => c.languages || [])
   : (data.languages || []);
-const urls = [...new Set(languages.flatMap(l => (l.outlets || []).map(o => o[1])))];
+const businessOutlets = data.countries ? Object.values(data.countries).flatMap(c => c.businessOutlets || []) : [];
+const urls = [...new Set([...languages.flatMap(l => (l.outlets || []).map(o => o[1])), ...businessOutlets.map(o => o[1])])];
 const UA = "Mozilla/5.0 (compatible; LocalNewsHubLinkCheck/2.0)";
 // 401/403/429 = site is up but blocks bots, so not counted as broken
 const OK = s => s < 400 || [401, 403, 405, 429, 999].includes(s);

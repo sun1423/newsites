@@ -4,6 +4,7 @@ window.OUTLETS={
   "countries": {
     "IN": {
       "name": "India",
+      "businessOutlets": [["The Economic Times","https://economictimes.indiatimes.com","b"],["Business Standard","https://www.business-standard.com","b"],["Mint","https://www.livemint.com","b"],["Financial Express","https://www.financialexpress.com","b"],["CNBC-TV18","https://www.cnbctv18.com","b"]],
       "languages": [
         {
           "code": "hi",
@@ -932,6 +933,7 @@ window.OUTLETS={
     },
     "US": {
       "name": "United States",
+      "businessOutlets": [["Bloomberg","https://www.bloomberg.com","b"],["CNBC","https://www.cnbc.com","b"],["The Wall Street Journal","https://www.wsj.com","b"],["MarketWatch","https://www.marketwatch.com","b"]],
       "languages": [
         {
           "code": "en",
@@ -974,6 +976,7 @@ window.OUTLETS={
     },
     "GB": {
       "name": "United Kingdom",
+      "businessOutlets": [["Financial Times","https://www.ft.com","b"],["City A.M.","https://www.cityam.com","b"],["The Telegraph — Business","https://www.telegraph.co.uk/business","b"],["The Guardian — Business","https://www.theguardian.com/uk/business","b"]],
       "languages": [
         {
           "code": "en",
@@ -1011,6 +1014,7 @@ window.OUTLETS={
     },
     "DE": {
       "name": "Germany",
+      "businessOutlets": [["Handelsblatt","https://www.handelsblatt.com","b"],["WirtschaftsWoche","https://www.wiwo.de","b"],["Manager Magazin","https://www.manager-magazin.de","b"],["Börsen-Zeitung","https://www.boersen-zeitung.de","b"]],
       "languages": [
         {
           "code": "de",
@@ -1053,6 +1057,7 @@ window.OUTLETS={
     },
     "FR": {
       "name": "France",
+      "businessOutlets": [["Les Echos","https://www.lesechos.fr","b"],["La Tribune","https://www.latribune.fr","b"],["Boursorama","https://www.boursorama.com","b"],["L'Opinion — Economy","https://www.lopinion.fr/economie","b"]],
       "languages": [
         {
           "code": "fr",
@@ -1127,6 +1132,7 @@ window.OUTLETS={
     },
     "IT": {
       "name": "Italy",
+      "businessOutlets": [["Il Sole 24 Ore","https://www.ilsole24ore.com","b"],["Milano Finanza","https://www.milanofinanza.it","b"],["ItaliaOggi","https://www.italiaoggi.it","b"],["Economy Magazine","https://www.economymagazine.it","b"]],
       "languages": [
         {
           "code": "it",
@@ -1164,6 +1170,7 @@ window.OUTLETS={
     },
     "CA": {
       "name": "Canada",
+      "businessOutlets": [["Financial Post","https://financialpost.com","b"],["BNN Bloomberg","https://www.bnnbloomberg.ca","b"],["The Globe and Mail — Business","https://www.theglobeandmail.com/business","b"],["Canadian Business","https://www.canadianbusiness.com","b"]],
       "languages": [
         {
           "code": "en",
@@ -1233,6 +1240,7 @@ window.OUTLETS={
     },
     "AU": {
       "name": "Australia",
+      "businessOutlets": [["Australian Financial Review","https://www.afr.com","b"],["Business News Australia","https://www.businessnewsaustralia.com","b"],["SmartCompany","https://www.smartcompany.com.au","b"],["ABC News — Business","https://www.abc.net.au/news/business","b"]],
       "languages": [
         {
           "code": "en",
@@ -2264,6 +2272,7 @@ window.OUTLETS={
     },
     "JP": {
       "name": "Japan",
+      "businessOutlets": [["Nikkei","https://www.nikkei.com","b"],["Toyo Keizai","https://toyokeizai.net","b"],["Japan Times — Business","https://www.japantimes.co.jp/business","b"],["Jiji Press","https://www.jiji.com","b"]],
       "languages": [
         {
           "code": "ja",
@@ -2338,6 +2347,7 @@ window.OUTLETS={
     },
     "CN": {
       "name": "China",
+      "businessOutlets": [["Caixin Global","https://www.caixinglobal.com","b"],["Yicai Global","https://www.yicaiglobal.com","b"],["China Daily — Business","https://www.chinadaily.com.cn/business","b"],["China Economic Net","https://en.ce.cn","b"]],
       "languages": [
         {
           "code": "zh",
