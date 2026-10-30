@@ -107,6 +107,7 @@ function fillLanguages(country,preferred=""){
 function render(){
   const code=$("lang").value,list=$("list"),country=ROOT.countries?.[$("country").value];
   const businessMode=type==="business",L=DATA.find(l=>l.code===code);
+  [...$("chips").children].forEach(c=>c.setAttribute("aria-pressed",c.dataset.t===type?"true":"false"));
   list.innerHTML="";
   const showControls=!!code||!!country?.businessOutlets?.length;
   $("q").hidden=$("chips").hidden=!showControls;
@@ -208,7 +209,7 @@ function parseHash(){
 }
 function syncHash(){
   const c=$("country").value,l=$("lang").value;
-  history.replaceState(null,"",c?("#"+c+(l?"/"+l:"")):location.pathname);
+  try{history.replaceState(null,"",c?("#"+c+(l?"/"+l:"")):location.pathname)}catch(e){console.warn("Could not update country hash:",e)}
 }
 
 async function init(){
@@ -221,7 +222,17 @@ async function init(){
     const start=await detectCountry();
     const preferredLang=hash.country===start?hash.lang:"";
     selectCountry(start,preferredLang,false);syncHash();
-  }catch(e){$("empty").textContent="Could not load outlets. Check your connection and reload."}
+  }catch(e){
+    console.error("Local News initialization failed:",e);
+    if(!Object.keys(ROOT.countries||{}).length){
+      $("empty").hidden=false;
+      $("empty").textContent="Could not load outlets. Check your connection and reload.";
+    }else{
+      const fallback=ROOT.defaultCountry||"IN";
+      selectCountry(fallback);
+      $("empty").hidden=true;
+    }
+  }
 }
 
 $("countrySearch").addEventListener("focus",e=>{e.target.select();showCountryMenu("")});
