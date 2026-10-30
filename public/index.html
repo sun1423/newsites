@@ -154,7 +154,7 @@ function selectCountry(code,preferredLang="",remember=false){
   $("country").value=code;
   $("countrySearch").value=country.name;
   closeCountryMenu();
-  setHeader(country);fillLanguages(country,preferredLang);$("q").value="";type="";$('[data-t="business"]').hidden=!country.businessOutlets?.length;
+  setHeader(country);fillLanguages(country,preferredLang);$("q").value="";type="";document.querySelector('[data-t="business"]').hidden=!country.businessOutlets?.length;
   [...$("chips").children].forEach((c,i)=>c.setAttribute("aria-pressed",i===0));
   render();
 }
@@ -220,7 +220,7 @@ async function init(){
     if(s.updated)$("foot").textContent="Links last checked "+new Date(s.updated).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
     const hash=parseHash();
     const initialCode=ROOT.countries?.[hash.country]?hash.country:(ROOT.defaultCountry||"IN");
-    const preferredLang=hash.country===initialCode?hash.lang:"";
+    const preferredLang=hash.country===initialCode?hash.lang:(initialCode==="IN"?"hi":"");
     selectCountry(initialCode,preferredLang,false);
     syncHash();
 
