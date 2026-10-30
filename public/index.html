@@ -213,31 +213,36 @@ function syncHash(){
 }
 
 async function init(){
-  ROOT=window.OUTLETS||{};
-
-  // Status metadata must never block country detection or outlet rendering.
-  fetch("status.json",{cache:"no-store"}).then(r=>r.ok?r.json():{}).then(s=>{
+  try{
+    ROOT=window.OUTLETS||{};
+    const s=await fetch("status.json").then(r=>r.ok?r.json():{}).catch(()=>({}));
     FAILS=s.fails||{};
     if(s.updated)$("foot").textContent="Links last checked "+new Date(s.updated).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"});
-    render();
-  }).catch(e=>console.warn("Status metadata unavailable:",e));
-
-  try{
     const hash=parseHash();
-    const detected=await detectCountry();
-    const startCode=ROOT.countries?.[detected]?detected:(ROOT.defaultCountry||"IN");
-    const preferredLang=hash.country===startCode?hash.lang:"";
-    selectCountry(startCode,preferredLang,false);
+    const initialCode=ROOT.countries?.[hash.country]?hash.country:(ROOT.defaultCountry||"IN");
+    const preferredLang=hash.country===initialCode?hash.lang:"";
+    selectCountry(initialCode,preferredLang,false);
     syncHash();
+
+    // Show usable outlets immediately; IP-based country detection is only a background enhancement.
+    if(!hash.country){
+      const initialSelection=initialCode;
+      detectCountry().then(code=>{
+        if(code&&ROOT.countries?.[code]&&$("country").value===initialSelection){
+          selectCountry(code,"",false);
+          syncHash();
+        }
+      }).catch(e=>console.warn("Country detection unavailable:",e));
+    }
   }catch(e){
     console.error("Local News initialization failed:",e);
-    const fallback=ROOT.defaultCountry||"IN";
-    if(ROOT.countries?.[fallback]){
-      selectCountry(fallback);
-      syncHash();
-    }else{
+    if(!Object.keys(ROOT.countries||{}).length){
       $("empty").hidden=false;
       $("empty").textContent="Could not load outlets. Check your connection and reload.";
+    }else{
+      const fallback=ROOT.defaultCountry||"IN";
+      selectCountry(fallback);
+      syncHash();
     }
   }
 }
