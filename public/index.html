@@ -65,6 +65,7 @@ footer{color:var(--mute);font-size:.78rem;text-align:center;padding:0 14px 24px}
       <button data-t="p" aria-pressed="false">Newspaper</button>
       <button data-t="t" aria-pressed="false">TV</button>
       <button data-t="d" aria-pressed="false">Digital</button>
+      <button data-t="business" aria-pressed="false">Business</button>
     </div>
   </div>
   <div class="count" id="count"></div>
@@ -74,7 +75,7 @@ footer{color:var(--mute);font-size:.78rem;text-align:center;padding:0 14px 24px}
 <footer id="foot"></footer>
 <script src="outlets.js"></script>
 <script>
-const TL={p:"Newspaper",t:"TV",d:"Digital"};
+const TL={p:"Newspaper",t:"TV",d:"Digital",b:"Business"};
 const $=id=>document.getElementById(id);
 let ROOT={},DATA=[],FAILS={},type="";
 const host=u=>{try{return new URL(u).hostname.replace(/^www\./,"")}catch{return u}};
@@ -104,15 +105,24 @@ function fillLanguages(country,preferred=""){
 }
 
 function render(){
-  const code=$("lang").value,list=$("list");
+  const code=$("lang").value,list=$("list"),country=ROOT.countries?.[$("country").value];
+  const businessMode=type==="business",L=DATA.find(l=>l.code===code);
   list.innerHTML="";
-  $("q").hidden=$("chips").hidden=!code;
-  if(!code){$("empty").hidden=false;$("empty").textContent="Choose a language above to see its news outlets.";$("count").textContent="";return}
-  const L=DATA.find(l=>l.code===code);
-  if(!L){$("empty").hidden=false;$("empty").textContent="No news sources configured for this language.";return}
+  const showControls=!!code||!!country?.businessOutlets?.length;
+  $("q").hidden=$("chips").hidden=!showControls;
+  if(businessMode&&!country?.businessOutlets?.length){
+    $("empty").hidden=false;$("empty").textContent="Business sources are not configured for this country.";$("count").textContent="";return;
+  }
+  if(!businessMode&&!code){
+    $("empty").hidden=false;$("empty").textContent="Choose a language above to see its news outlets.";$("count").textContent="";return;
+  }
+  if(!businessMode&&!L){
+    $("empty").hidden=false;$("empty").textContent="No news sources configured for this language.";$("count").textContent="";return;
+  }
   const q=$("q").value.trim().toLowerCase();
-  const items=L.outlets.filter(o=>(FAILS[o[1]]||0)<2&&(!type||o[2]===type)&&(!q||o[0].toLowerCase().includes(q)||o[1].toLowerCase().includes(q)));
-  $("count").textContent=items.length+" outlets · "+L.name;
+  const source=businessMode?country.businessOutlets:L.outlets;
+  const items=source.filter(o=>(FAILS[o[1]]||0)<2&&(!businessMode&&type?o[2]===type:true)&&(!q||o[0].toLowerCase().includes(q)||o[1].toLowerCase().includes(q)));
+  $("count").textContent=items.length+" outlets · "+(businessMode?"Business · "+country.name:L.name);
   $("empty").hidden=items.length>0;
   $("empty").textContent="No outlets match.";
   const frag=document.createDocumentFragment();
@@ -143,7 +153,7 @@ function selectCountry(code,preferredLang="",remember=false){
   $("country").value=code;
   $("countrySearch").value=country.name;
   closeCountryMenu();
-  setHeader(country);fillLanguages(country,preferredLang);$("q").value="";type="";
+  setHeader(country);fillLanguages(country,preferredLang);$("q").value="";type="";$('[data-t="business"]').hidden=!country.businessOutlets?.length;
   [...$("chips").children].forEach((c,i)=>c.setAttribute("aria-pressed",i===0));
   render();
 }
@@ -226,7 +236,7 @@ $("countrySearch").addEventListener("keydown",e=>{
 });
 $("countryMenu").addEventListener("click",e=>{const b=e.target.closest(".country-option");if(!b)return;selectCountry(b.dataset.code,"",false);syncHash()});
 document.addEventListener("click",e=>{if(!e.target.closest(".country-picker"))closeCountryMenu()});
-$("lang").addEventListener("change",e=>{store.set("lang:"+$("country").value,e.target.value);$("q").value="";render();syncHash()});
+$("lang").addEventListener("change",e=>{store.set("lang:"+$("country").value,e.target.value);$("q").value="";if(type==="business")type="";render();syncHash()});
 $("q").addEventListener("input",render);
 $("chips").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;type=b.dataset.t;[...$("chips").children].forEach(c=>c.setAttribute("aria-pressed",c===b));render()});
 init();
